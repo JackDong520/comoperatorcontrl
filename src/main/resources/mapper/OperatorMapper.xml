@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wyfx.business.dao.OperatorMapper">
+    <!-- 根据uid查询一个用户信息 -->
+    <select id="selectOperatorById" parameterType="Integer"
+            resultType="com.wyfx.business.entity.OperatorInfo">
+        select * from operation_log where uid = #{uid}
+    </select>
+    <!-- 查询所有用户信息 -->
+    <select id="selectAllOperator" resultType="com.wyfx.business.entity.OperatorInfo">
+        select * from operation_log
+    </select>
+    <!-- 添加一个用户，#{uname}为 com.mybatis.po.User属性值 -->
+    <insert id="addOperator" parameterType="com.wyfx.business.entity.OperatorInfo">
+        insert into operation_log (account_type,operator,operation_type,operation_behavior,related_data)
+        values(#{account_type},#{operator},#{operation_type},#{operation_behavior},#{related_data})
+    </insert>
+    <!--修改一个用户 -->
+    <update id="updateOperator" parameterType="com.wyfx.business.entity.OperatorInfo">
+        update operation_log set uname =
+        #{uname},usex = #{usex} where uid = #{uid}
+    </update>
+    <!-- 删除一个用户 -->
+    <delete id="deleteOperator" parameterType="Integer">
+        delete from operation_log where uid
+        = #{uid}
+    </delete>
+</mapper>
