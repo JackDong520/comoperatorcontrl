@@ -1,17 +1,22 @@
 package com.wyfx.business.controller;
 
+import com.google.gson.Gson;
+import com.wyfx.business.controller.commons.MyResponseEntity;
+import com.wyfx.business.controller.commons.ResponseCode;
 import com.wyfx.business.entity.OperatorInfo;
 import com.wyfx.business.service.OperatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
-//@RestController
+/**
+ * @author jackdong
+ * @date 2019/12/19
+ * @description 操作日志管理
+ */
 @Controller
 @RequestMapping("/OperatorInfo")
 public class OperatorInfoController {
@@ -19,63 +24,96 @@ public class OperatorInfoController {
     @Autowired
     private OperatorService operatorService;
 
+    @Autowired
+    private Gson gson;
+
+    private int pageSize = 5;
+
+    /**
+     * 查询单个日志操作信息
+     * @param uid
+     * @return
+     */
+
     @RequestMapping("/getOperatorInfo")
     @ResponseBody
-    public String getOperatorInfo(@RequestParam(value = "uid", defaultValue = "0") int uid) {
-        return operatorService.getOperatorInfo(uid).getAccount_type();
+    public Object getOperatorInfo(@RequestParam(value = "uid", defaultValue = "0") int uid) {
+        List<OperatorInfo> list = operatorService.getOperatorInfo(uid);
+        return new MyResponseEntity<>(ResponseCode.SUCCESS.getValue(), list);
     }
 
+    /**
+     * 获取所有操作日志信息
+     * @return
+     */
     @RequestMapping("/getAllOperatorInfo")
     @ResponseBody
-    public String getAllOperatorInfo() {
-        List<OperatorInfo> operatorInfos = operatorService.getAllOperatorInfo();
-        for (OperatorInfo operatorInfo : operatorInfos) {
-            System.out.println(operatorInfo.getAccount_type());
-        }
-        return null;
+    public Object getAllOperatorInfo() {
+        List<OperatorInfo> list = operatorService.getAllOperatorInfo();
+        return new MyResponseEntity<>(ResponseCode.SUCCESS.getValue(), list);
     }
 
+    /**
+     * 添加日志操作信息
+     * @param operatorInfo
+     * @return
+     */
     @RequestMapping("/addOperator")
     @ResponseBody
-    public String addOperator() {
-        OperatorInfo operatorInfo = new OperatorInfo();
-        operatorInfo.setAccount_type("x");
-        operatorInfo.setOperator("x");
-        operatorInfo.setOperation_type("xx");
-        operatorInfo.setRelated_data("xxx");
-        operatorInfo.setOperation_behavior("xxxx");
+    public Object addOperator(@RequestBody OperatorInfo operatorInfo) {
         operatorService.addOperator(operatorInfo);
-        return null;
+        return new MyResponseEntity<>(ResponseCode.SUCCESS.getValue());
     }
 
+    /**
+     * 更新日志操作信息
+     * @param operatorInfo
+     * @return
+     */
     @RequestMapping("/updateOperator")
     @ResponseBody
-    public String updateOperator() {
-        OperatorInfo operatorInfo = new OperatorInfo();
-        operatorInfo.setAccount_type("x");
-        operatorInfo.setOperator("x");
-        operatorInfo.setOperation_type("xx");
-        operatorInfo.setRelated_data("xxx");
-        operatorInfo.setOperation_behavior("xxxx");
+    public Object updateOperator(@RequestBody OperatorInfo operatorInfo) {
         operatorService.updateOperator(operatorInfo);
-        return null;
+        return new MyResponseEntity<>(ResponseCode.SUCCESS.getValue());
     }
 
+    /**
+     * 删除日志操作信息
+     * @param uid
+     * @return
+     */
     @RequestMapping("/deleteOperator")
     @ResponseBody
-    public String deleteOperator(@RequestParam(value = "uid", defaultValue = "0") int uid) {
+    public Object deleteOperator(@RequestParam(value = "uid", defaultValue = "0") int uid) {
         operatorService.deleteOperator(uid);
-        return null;
+        return new MyResponseEntity<>(ResponseCode.SUCCESS.getValue());
     }
 
-    @RequestMapping(value = "/addWorkType", method = RequestMethod.POST)
-    public Object addWorkType(Integer zidianType, String workName, Integer status, String color) {
-        System.out.println(zidianType);
-        System.out.println(workName);
-        System.out.println(status);
-        System.out.println(color);
-        return null;
+    /**
+     * 通过操作员名称查找日志操作信息集合
+     * @param operator
+     * @return
+     */
+    @RequestMapping("/selectOperatorByName")
+    @ResponseBody
+    public Object selectOperatorByName(@RequestParam(value = "operator", defaultValue = "000") String operator) {
+        List<OperatorInfo> list = operatorService.selectOperatorByName(operator);
+        return new MyResponseEntity<>(ResponseCode.SUCCESS.getValue(), list);
     }
 
+    /**
+     * 分页查找日志操作信息
+     * @param currPage
+     * @return
+     */
+    @RequestMapping("/selectOperatorByPage")
+    @ResponseBody
+    public Object selectOperatorByPage(@RequestParam(value = "page", defaultValue = "1") int currPage) {
+        HashMap<String, Object> data = new HashMap<String, Object>();
+        data.put("currIndex", (currPage - 1) * pageSize);
+        data.put("pageSize", pageSize);
+        List<OperatorInfo> list = operatorService.selectOperatorByPage(data);
+        return new MyResponseEntity<>(ResponseCode.SUCCESS.getValue(), list);
+    }
 
 }

@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OperatorServiceImpl implements OperatorService {
@@ -16,8 +18,10 @@ public class OperatorServiceImpl implements OperatorService {
     private OperatorMapper operatorMapper;
 
     @Override
-    public OperatorInfo getOperatorInfo(int uid) {
-        return operatorMapper.selectOperatorById(uid);
+    public List<OperatorInfo> getOperatorInfo(int uid) {
+        List<OperatorInfo> list = new ArrayList<>();
+        list.add(operatorMapper.selectOperatorById(uid));
+        return list;
     }
 
     @Override
@@ -40,11 +44,26 @@ public class OperatorServiceImpl implements OperatorService {
         return operatorMapper.deleteOperator(uid);
     }
 
+    @Override
+    public List<OperatorInfo> selectOperatorByName(String key) {
+        return operatorMapper.selectOperatorByName(key);
+    }
+
+    @Override
+    public List<OperatorInfo> selectOperatorByPage(Map<String, Object> data) {
+        return operatorMapper.selectOperatorByPage(data);
+    }
+
+    @Override
+    public List<OperatorInfo> selectOperatorNyDate(Map<String, Object> data) {
+        return operatorMapper.selectOperatorNyDate(data);
+    }
+
 
     @Test
     void test() {
         OperatorServiceImpl operatorService = new OperatorServiceImpl();
-        OperatorInfo operatorInfo= new OperatorInfo();
+        OperatorInfo operatorInfo = new OperatorInfo();
         operatorInfo.setRelated_data("xx");
         operatorInfo.setOperation_type("xx");
         operatorInfo.setOperator("xx");

@@ -5,10 +5,15 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Date;
+import java.sql.Time;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MyBatisTest {
     public static void main(String[] args) {
@@ -27,11 +32,11 @@ public class MyBatisTest {
              * 中的命名空间+select 的 id
              */
             // 查询一个用户
-            OperatorInfo mu = ss.selectOne(
-                    "com.jack.dao.OperatorMapper.selectOperatorById", 1);
-            System.out.println(mu);
-
-            // 添加一个用户
+//            OperatorInfo mu = ss.selectOne(
+//                    "com.jack.dao.OperatorMapper.selectOperatorById", 1);
+//            System.out.println(mu);
+//
+//            // 添加一个用户
             OperatorInfo addmu = new OperatorInfo();
             addmu.setAccount_type("123");
             addmu.setOperation_behavior("123");
@@ -39,20 +44,22 @@ public class MyBatisTest {
             addmu.setOperator("123");
             addmu.setRelated_data("123");
             addmu.setUid(2);
-
-
-            ss.insert("com.jack.dao.OperatorMapper.addUser", addmu);
-//            // 修改一个用户
-//            OperatorInfo updatemu = new OperatorInfo();
-//
-//            ss.update("com.mybatis.mapper.UserMapper.updateUser", updatemu);
-//            // 删除一个用户
-//            ss.delete("com.mybatis.mapper.UserMapper.deleteUser", 3);
-//            // 查询所有用户
+            addmu.setDate(new Date(System.currentTimeMillis()));
+          ss.insert("com.wyfx.business.dao.OperatorMapper.addOperator", addmu);
+////            // 修改一个用户
+////            OperatorInfo updatemu = new OperatorInfo();
+////
+////            ss.update("com.mybatis.mapper.UserMapper.updateUser", updatemu);
+////            // 删除一个用户
+////            ss.delete("com.mybatis.mapper.UserMapper.deleteUser", 3);
+////            // 查询所有用户
+            HashMap hashMap = new HashMap();
+            hashMap.put("startdate","2019-12-20");
+            hashMap.put("enddate","2020-07-31");
             List<OperatorInfo> listMu = ss
-                    .selectList("com.jack.dao.OperatorMapper.selectAllUser");
+                    .selectList("com.wyfx.business.dao.OperatorMapper.selectOperatorNyDate",hashMap);
             for (OperatorInfo myUser : listMu) {
-                System.out.println(myUser.getRelated_data());
+                System.out.println(myUser.getDate().toString());
             }
             // 提交事务
             ss.commit();
@@ -63,4 +70,9 @@ public class MyBatisTest {
             e.printStackTrace();
         }
     }
+//    @Test
+//    public void test(){
+//        Date date = new Date(System.currentTimeMillis());
+//        System.out.println(date);
+//    }
 }

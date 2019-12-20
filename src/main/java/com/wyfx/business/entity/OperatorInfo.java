@@ -1,5 +1,7 @@
 package com.wyfx.business.entity;
 
+import java.sql.Date;
+
 public class OperatorInfo {
     private long uid;
     private String account_type;
@@ -7,6 +9,15 @@ public class OperatorInfo {
     private String operation_type;
     private String operation_behavior;
     private String related_data;
+    private Date date;
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     public long getUid() {
         return uid;
