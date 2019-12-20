@@ -59,6 +59,11 @@ public class OperatorServiceImpl implements OperatorService {
         return operatorMapper.selectOperatorNyDate(data);
     }
 
+    @Override
+    public List<OperatorInfo> selectOperatorByAllKey(Map<String, Object> data) {
+        return operatorMapper.selectOperatorByAllKey(data);
+    }
+
 
     @Test
     void test() {

@@ -23,4 +23,6 @@ public interface OperatorService {
     List<OperatorInfo> selectOperatorByPage(Map<String,Object> data);
 
     List<OperatorInfo> selectOperatorNyDate(Map<String,Object> data);
+
+    List<OperatorInfo> selectOperatorByAllKey(Map<String,Object> data);
 }

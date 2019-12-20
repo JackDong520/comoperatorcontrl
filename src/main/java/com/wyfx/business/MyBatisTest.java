@@ -56,8 +56,9 @@ public class MyBatisTest {
             HashMap hashMap = new HashMap();
             hashMap.put("startdate","2019-12-20");
             hashMap.put("enddate","2020-07-31");
+            hashMap.put("uid","21");
             List<OperatorInfo> listMu = ss
-                    .selectList("com.wyfx.business.dao.OperatorMapper.selectOperatorNyDate",hashMap);
+                    .selectList("com.wyfx.business.dao.OperatorMapper.selectOperatorByAllKey",hashMap);
             for (OperatorInfo myUser : listMu) {
                 System.out.println(myUser.getDate().toString());
             }

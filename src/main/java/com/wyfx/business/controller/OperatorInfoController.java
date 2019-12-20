@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class OperatorInfoController {
 
     /**
      * 查询单个日志操作信息
+     *
      * @param uid
      * @return
      */
@@ -44,6 +46,7 @@ public class OperatorInfoController {
 
     /**
      * 获取所有操作日志信息
+     *
      * @return
      */
     @RequestMapping("/getAllOperatorInfo")
@@ -55,6 +58,7 @@ public class OperatorInfoController {
 
     /**
      * 添加日志操作信息
+     *
      * @param operatorInfo
      * @return
      */
@@ -67,6 +71,7 @@ public class OperatorInfoController {
 
     /**
      * 更新日志操作信息
+     *
      * @param operatorInfo
      * @return
      */
@@ -79,6 +84,7 @@ public class OperatorInfoController {
 
     /**
      * 删除日志操作信息
+     *
      * @param uid
      * @return
      */
@@ -91,6 +97,7 @@ public class OperatorInfoController {
 
     /**
      * 通过操作员名称查找日志操作信息集合
+     *
      * @param operator
      * @return
      */
@@ -103,6 +110,7 @@ public class OperatorInfoController {
 
     /**
      * 分页查找日志操作信息
+     *
      * @param currPage
      * @return
      */
@@ -115,5 +123,37 @@ public class OperatorInfoController {
         List<OperatorInfo> list = operatorService.selectOperatorByPage(data);
         return new MyResponseEntity<>(ResponseCode.SUCCESS.getValue(), list);
     }
+
+
+    @RequestMapping("/selectOperatorNyDate")
+    @ResponseBody
+    public Object selectOperatorNyDate(@RequestParam(value = "startdate", defaultValue = "1") String startdate,
+                                       @RequestParam(value = "enddate", defaultValue = "1") String enddate) {
+        HashMap<String, Object> data = new HashMap<String, Object>();
+        System.out.println(startdate);
+        System.out.println(enddate);
+        data.put("startdate", startdate);
+        data.put("enddate", enddate);
+        List<OperatorInfo> list = operatorService.selectOperatorNyDate(data);
+        return new MyResponseEntity<>(ResponseCode.SUCCESS.getValue(), list);
+    }
+
+    @RequestMapping("/selectOperatorByAllKey")
+    @ResponseBody
+    public Object selectOperatorByAllKey(@RequestParam(value = "startdate", defaultValue = "2018-01-01") String startdate,
+                                         @RequestParam(value = "enddate", defaultValue = "2050-01-01") String enddate,
+                                         @RequestParam(value = "operator", defaultValue = "") String operator,
+                                         @RequestParam(value = "account_type", defaultValue = "") String account_type,
+                                         @RequestParam(value = "operation_type", defaultValue = "") String operation_type) {
+        HashMap<String, Object> data = new HashMap<String, Object>();
+        data.put("startdate", startdate);
+        data.put("enddate", enddate);
+        data.put("operator", operator);
+        data.put("account_type", account_type);
+        data.put("operation_type", operation_type);
+        List<OperatorInfo> list = operatorService.selectOperatorByAllKey(data);
+        return new MyResponseEntity<>(ResponseCode.SUCCESS.getValue(), list);
+    }
+
 
 }

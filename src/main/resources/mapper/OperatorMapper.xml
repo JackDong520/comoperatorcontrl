@@ -35,28 +35,47 @@
     </select>
 
     <!-- 根据日期范围进行查找用户信息 -->
-    <select id="selectOperatorNyDate"  parameterType="map"
+    <select id="selectOperatorNyDate" parameterType="map"
+            resultType="com.wyfx.business.entity.OperatorInfo">
+        select *
+        from operation_log
+        where date
+                      between #{startdate} and #{enddate}
+    </select>
+
+    <select id="selectOperatorByAllKey" parameterType="map"
             resultType="com.wyfx.business.entity.OperatorInfo">
         select *
         from operation_log
         where date
         between #{startdate} and #{enddate}
-            </select>
+        <!--<if test="startdate != null and startdate !='' and enddate != null and enddate != ''"></if>-->
+        <if test="operator !=null and operator!=''">
+            and operator =#{operator}
+        </if>
+        <if test="account_type != null and account_type != ''">
+            and account_type = #{account_type}
+        </if>
+        <if test="operation_type !=null and operation_type != ''">
+            and operation_type = #{operation_type}
+        </if>
+
+    </select>
 
 
     <!-- 添加一个用户，#{uname}为 com.mybatis.po.User属性值 -->
     <insert id="addOperator" parameterType="com.wyfx.business.entity.OperatorInfo">
-        insert into operation_log (account_type, operator, operation_type, operation_behavior, related_data,date)
-        values (#{account_type}, #{operator}, #{operation_type}, #{operation_behavior}, #{related_data},#{date})
+        insert into operation_log (account_type, operator, operation_type, operation_behavior, related_data, date)
+        values (#{account_type}, #{operator}, #{operation_type}, #{operation_behavior}, #{related_data}, #{date})
     </insert>
     <!--修改一个用户 -->
     <update id="updateOperator" parameterType="com.wyfx.business.entity.OperatorInfo">
         update operation_log
-        set account_type = #{account_type},
-            operator  = #{operator},
-            operation_type = #{operation_type},
-            operation_behavior  = #{operation_behavior},
-            related_data = #{related_data}
+        set account_type       = #{account_type},
+            operator           = #{operator},
+            operation_type     = #{operation_type},
+            operation_behavior = #{operation_behavior},
+            related_data       = #{related_data}
         where uid = #{uid}
     </update>
     <!-- 删除一个用户 -->
